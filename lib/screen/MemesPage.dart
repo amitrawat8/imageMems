@@ -1,9 +1,9 @@
-import 'package:imageflip/utility/Error_txt.dart';
-import 'package:imageflip/utility/ImageShow.dart';
-import 'package:imageflip/utility/LoadingIndicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:imageflip/utility/Error_txt.dart';
+import 'package:imageflip/utility/ImageShow.dart';
+import 'package:imageflip/utility/LoadingIndicator.dart';
 
 import '../bloc/memes/memes_bloc.dart';
 import '../bloc/memes/memes_event.dart';
@@ -22,7 +22,6 @@ class MemePage extends StatefulWidget {
 class _MemePageState extends State<MemePage> {
   final MemesBloc _newsBloc = MemesBloc();
 
-  int indexSelected = 0;
   bool loadingBookmarker = true;
   List<Memes> memesList = [];
 
@@ -38,14 +37,6 @@ class _MemePageState extends State<MemePage> {
     return Scaffold(
       body: _buildListCovid(),
     );
-  }
-
-  void getAllOfflineData() {
-    SQLiteDbProvider.db.getAllMemesData().then((value) => {
-          setState(() {
-            memesList = value;
-          }),
-        });
   }
 
   Widget _buildListCovid() {
@@ -103,7 +94,7 @@ class _MemePageState extends State<MemePage> {
       itemBuilder: (context, index) {
         return Card(
           child: Container(
-            child: showImage(model!.data?.memes![index], index),
+            child: showImage(model.data?.memes![index], index),
           ),
         );
       },
@@ -124,7 +115,6 @@ class _MemePageState extends State<MemePage> {
                 alignment: Alignment.topRight,
                 child: InkWell(
                   onTap: () {
-                    indexSelected = position;
                     if (memes.bookmark!) {
                       removedBookmark(memes);
                     } else {
@@ -166,6 +156,17 @@ class _MemePageState extends State<MemePage> {
         )
       ],
     );
+  }
+
+  void getAllOfflineData() {
+    SQLiteDbProvider.db.getAllMemesData().then((value) => {
+          if (mounted)
+            {
+              setState(() {
+                memesList = value;
+              }),
+            }
+        });
   }
 
   void addBookMarker(Memes model) {

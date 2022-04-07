@@ -21,19 +21,12 @@ class OfflinePage extends StatefulWidget {
 
 class _OfflinePageState extends State<OfflinePage> {
   final OfflineBloc _newsBloc = OfflineBloc();
-  bool isInternet = false;
 
   @override
   void initState() {
     _newsBloc.add(GetOfflineMemesList());
 
     super.initState();
-  }
-
-  Internet(bool value) {
-    setState(() {
-      isInternet = value;
-    });
   }
 
   @override

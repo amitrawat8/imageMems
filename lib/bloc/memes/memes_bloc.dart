@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:bloc/bloc.dart';
 import 'package:imageflip/model/mems_dto.dart';
 import 'package:imageflip/utility/internet_util.dart';
-import 'package:bloc/bloc.dart';
 
 import '../../repository/api_repository.dart';
 import 'memes_event.dart';
@@ -26,7 +26,6 @@ class MemesBloc extends Bloc<MemesEvent, MemeState> {
           emit(const MemeError("Check Internet Connection"));
         } else {
           var mList = responses[1] as MemesDTO;
-          // final mList = await _apiRepository.getMemesList();
           emit(MemeLoaded(mList));
           if (mList.error != null) {
             emit(MemeError(mList.error));
